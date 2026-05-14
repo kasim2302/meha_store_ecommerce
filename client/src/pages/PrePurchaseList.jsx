@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { PrePurchaseContext } from '../context/PrePurchaseContext';
 import { AuthContext } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import axios from 'axios';
+import axios from '../api/axios';
 import { Trash2, ArrowRight, Package } from 'lucide-react';
 
 const PrePurchaseList = () => {

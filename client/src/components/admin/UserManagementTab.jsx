@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from '../../api/axios';
 import { Users, ShieldCheck, User } from 'lucide-react';
 
 const UserManagementTab = ({ userToken }) => {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from '../../api/axios';
 import { IndianRupee, X } from 'lucide-react';
 import { useToast } from '../../context/ToastContext';
 

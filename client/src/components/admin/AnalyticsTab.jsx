@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from '../../api/axios';
 import { Users, Package, ShoppingCart, DollarSign, AlertCircle } from 'lucide-react';
 
 const AnalyticsTab = ({ userToken }) => {
