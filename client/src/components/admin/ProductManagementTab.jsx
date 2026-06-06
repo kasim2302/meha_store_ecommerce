@@ -4,7 +4,7 @@ import { Plus, Edit, Trash2, X } from 'lucide-react';
 import { useToast } from '../../context/ToastContext';
 import ConfirmDialog from '../ui/ConfirmDialog';
 
-const ProductManagementTab = ({ userToken }) => {
+const ProductManagementTab = () => {
   const toast = useToast();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -86,9 +86,7 @@ const ProductManagementTab = ({ userToken }) => {
   const handleDelete = async () => {
     setConfirmOpen(false);
     try {
-      await axios.delete(`/api/products/${pendingDeleteId}`, {
-        headers: { Authorization: `Bearer ${userToken}` }
-      });
+      await axios.delete(`/api/products/${pendingDeleteId}`);
       toast.success(`"${pendingDeleteName}" has been removed.`, 'Product Deleted');
       fetchProducts();
     } catch (error) {
@@ -119,12 +117,12 @@ const ProductManagementTab = ({ userToken }) => {
 
       if (editingId) {
         await axios.put(`/api/products/${editingId}`, data, {
-          headers: { Authorization: `Bearer ${userToken}`, 'Content-Type': 'multipart/form-data' }
+          headers: { 'Content-Type': 'multipart/form-data' }
         });
         toast.success(`"${formData.name}" has been updated.`, 'Product Updated');
       } else {
         await axios.post('/api/products', data, {
-          headers: { Authorization: `Bearer ${userToken}`, 'Content-Type': 'multipart/form-data' }
+          headers: { 'Content-Type': 'multipart/form-data' }
         });
         toast.success(`"${formData.name}" has been added to the store.`, 'Product Added');
       }

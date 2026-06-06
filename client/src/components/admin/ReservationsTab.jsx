@@ -3,7 +3,7 @@ import axios from '../../api/axios';
 import { IndianRupee, X } from 'lucide-react';
 import { useToast } from '../../context/ToastContext';
 
-const ReservationsTab = ({ userToken }) => {
+const ReservationsTab = () => {
   const toast = useToast();
   const [prePurchases, setPrePurchases] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,14 +16,13 @@ const ReservationsTab = ({ userToken }) => {
 
   useEffect(() => {
     fetchPrePurchases();
-  }, [userToken]);
+  }, []);
+
 
   const fetchPrePurchases = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('/api/prepurchase', {
-        headers: { Authorization: `Bearer ${userToken}` }
-      });
+      const res = await axios.get('/api/prepurchase');
       setPrePurchases(res.data);
     } catch (error) {
       console.error(error);
@@ -34,9 +33,7 @@ const ReservationsTab = ({ userToken }) => {
 
   const updateStatus = async (id, status) => {
     try {
-      await axios.put(`/api/prepurchase/${id}/status`, { status }, {
-        headers: { Authorization: `Bearer ${userToken}` }
-      });
+      await axios.put(`/api/prepurchase/${id}/status`, { status });
       toast.success(`Reservation marked as ${status}.`);
       fetchPrePurchases();
     } catch (error) {
@@ -61,8 +58,6 @@ const ReservationsTab = ({ userToken }) => {
       await axios.put(`/api/prepurchase/${completingOrder._id}/status`, {
         status: 'Completed',
         finalAmount: Number(finalAmount)
-      }, {
-        headers: { Authorization: `Bearer ${userToken}` }
       });
       toast.success(
         `Order completed. Final amount: ₹${Number(finalAmount).toLocaleString('en-IN')}`,

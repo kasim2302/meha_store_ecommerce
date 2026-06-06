@@ -22,10 +22,6 @@ const PrePurchaseList = () => {
 
     setIsSubmitting(true);
     try {
-      const config = {
-        headers: { Authorization: `Bearer ${user.token}` }
-      };
-      
       const payload = {
         items: prePurchaseItems.map(item => ({
           product: item.product._id,
@@ -35,7 +31,7 @@ const PrePurchaseList = () => {
         totalAmount: getPrePurchaseTotal()
       };
 
-      await axios.post('/api/prepurchase', payload, config);
+      await axios.post('/api/prepurchase', payload);
       setSuccess(true);
       clearPrePurchase();
     } catch (error) {

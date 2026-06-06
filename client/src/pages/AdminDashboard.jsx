@@ -28,11 +28,11 @@ const AdminDashboard = () => {
 
   const renderTab = () => {
     switch (activeTab) {
-      case 'dashboard':    return <AnalyticsTab userToken={user.token} />;
-      case 'products':     return <ProductManagementTab userToken={user.token} />;
-      case 'categories':  return <CategoryManagementTab userToken={user.token} />;
-      case 'users':       return <UserManagementTab userToken={user.token} />;
-      case 'reservations':return <ReservationsTab userToken={user.token} />;
+      case 'dashboard':    return <AnalyticsTab />;
+      case 'products':     return <ProductManagementTab />;
+      case 'categories':  return <CategoryManagementTab />;
+      case 'users':       return <UserManagementTab />;
+      case 'reservations':return <ReservationsTab />;
       default:            return null;
     }
   };

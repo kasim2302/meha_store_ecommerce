@@ -2,16 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axios from '../../api/axios';
 import { Users, Package, ShoppingCart, DollarSign, AlertCircle } from 'lucide-react';
 
-const AnalyticsTab = ({ userToken }) => {
+const AnalyticsTab = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const { data } = await axios.get('/api/admin/stats', {
-          headers: { Authorization: `Bearer ${userToken}` }
-        });
+        const { data } = await axios.get('/api/admin/stats');
         setStats(data);
       } catch (error) {
         console.error('Failed to fetch stats', error);
@@ -20,7 +18,7 @@ const AnalyticsTab = ({ userToken }) => {
       }
     };
     fetchStats();
-  }, [userToken]);
+  }, []);
 
   if (loading) return <div className="text-gray-500">Loading analytics...</div>;
   if (!stats) return <div className="text-red-500">Failed to load analytics</div>;

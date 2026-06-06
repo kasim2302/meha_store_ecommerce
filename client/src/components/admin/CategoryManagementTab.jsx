@@ -4,7 +4,7 @@ import { Plus, Trash2, Tag } from 'lucide-react';
 import { useToast } from '../../context/ToastContext';
 import ConfirmDialog from '../ui/ConfirmDialog';
 
-const CategoryManagementTab = ({ userToken }) => {
+const CategoryManagementTab = () => {
   const toast = useToast();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,9 +37,7 @@ const CategoryManagementTab = ({ userToken }) => {
     if (!newName.trim()) return;
     setSubmitting(true);
     try {
-      await axios.post('/api/categories', { name: newName.trim(), description: newDesc.trim() }, {
-        headers: { Authorization: `Bearer ${userToken}` }
-      });
+      await axios.post('/api/categories', { name: newName.trim(), description: newDesc.trim() });
       toast.success(`"${newName.trim()}" has been added.`, 'Category Created');
       setNewName('');
       setNewDesc('');
@@ -60,9 +58,7 @@ const CategoryManagementTab = ({ userToken }) => {
   const handleDelete = async () => {
     setConfirmOpen(false);
     try {
-      await axios.delete(`/api/categories/${pendingDeleteId}`, {
-        headers: { Authorization: `Bearer ${userToken}` }
-      });
+      await axios.delete(`/api/categories/${pendingDeleteId}`);
       toast.success(`"${pendingDeleteName}" has been removed.`, 'Category Deleted');
       fetchCategories();
     } catch (error) {
