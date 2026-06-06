@@ -28,7 +28,8 @@ const app = express();
 
 // ── Security Headers (helmet) ───────────────────────────────
 // Sets X-Content-Type-Options, X-Frame-Options, HSTS, etc.
-app.use(helmet());
+// contentSecurityPolicy is disabled — it would block Vercel frontend assets
+app.use(helmet({ contentSecurityPolicy: false }));
 
 // ── CORS ────────────────────────────────────────────────────
 app.use(cors({
@@ -40,9 +41,9 @@ app.use(cors({
   credentials: true,
 }));
 
-// ── Body Parsing (limit 10kb to block large-payload attacks) ─
-app.use(express.json({ limit: '10kb' }));
-app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+// ── Body Parsing (limit 50kb) ──────────────────────────────
+app.use(express.json({ limit: '50kb' }));
+app.use(express.urlencoded({ extended: true, limit: '50kb' }));
 
 // ── Cookie Parser ───────────────────────────────────────────
 app.use(cookieParser());

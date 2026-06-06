@@ -67,7 +67,8 @@ export const getAllPrePurchases = async (req, res) => {
 // @access  Private/Admin
 export const updatePrePurchaseStatus = async (req, res) => {
   try {
-    const allowedStatuses = ['Pending', 'Confirmed', 'Completed', 'Cancelled'];
+    // Must match the enum in models/PrePurchase.js exactly
+    const allowedStatuses = ['Pending', 'Allocated', 'Completed', 'Cancelled'];
     const { status, finalAmount } = req.body;
 
     // Validate status value against whitelist
