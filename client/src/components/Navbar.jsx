@@ -30,23 +30,32 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link to="/" className="flex-shrink-0 flex items-center">
+            <Link to="/" className="flex-shrink-0 flex items-center gap-2.5">
+              {/* Square icon mark — 40×40, always crisp */}
               <img
-                src="/meha-logo.png"
-                alt="MEHA Store"
-                className="h-10 w-auto object-contain"
+                src="/meha-icon.png"
+                alt="MEHA"
+                className="h-10 w-10 rounded-xl object-cover shadow-sm"
                 onError={(e) => {
-                  // Graceful fallback if image fails
                   e.target.style.display = 'none';
                   e.target.nextSibling.style.display = 'flex';
                 }}
               />
-              {/* Fallback text logo (hidden unless image fails) */}
+              {/* Fallback gradient badge if image fails */}
               <span
-                className="font-bold text-xl tracking-tight text-indigo-600 items-center gap-2"
-                style={{ display: 'none' }}
+                className="h-10 w-10 rounded-xl items-center justify-center text-white font-black text-lg shadow-sm"
+                style={{ display: 'none', background: 'linear-gradient(135deg,#4F46E5,#7C3AED)' }}
               >
-                MEHA Store
+                M
+              </span>
+              {/* Brand text — always CSS, always sharp */}
+              <span className="flex flex-col leading-none">
+                <span className="font-black text-lg tracking-tight text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  MEHA
+                </span>
+                <span className="font-semibold text-xs tracking-widest uppercase text-indigo-600" style={{ fontFamily: 'Nunito Sans, sans-serif', letterSpacing: '0.15em' }}>
+                  Store
+                </span>
               </span>
             </Link>
             <div className="hidden sm:ml-8 sm:flex sm:space-x-8">
