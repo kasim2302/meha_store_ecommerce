@@ -5,20 +5,17 @@ import User from '../models/User.js';
 const isProduction = process.env.NODE_ENV === 'production';
 
 const COOKIE_OPTIONS = {
-  httpOnly: true,                          // JS cannot access this cookie
-  secure: isProduction,                    // HTTPS only in production
+  httpOnly: true,                    // JS cannot access this cookie
+  secure: isProduction,              // HTTPS only in production
   sameSite: isProduction ? 'none' : 'lax', // 'none' required for cross-origin (Vercel → Render)
-  maxAge: 30 * 24 * 60 * 60 * 1000,       // 30 days in ms
+  maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in ms
 };
 
 // Helper: generate JWT token
 const generateToken = (id) => {
-  const secret = process.env.JWT_SECRET;
-  if (!secret) {
-    // Log a clear warning in Render logs — go to Render → Environment and add JWT_SECRET
-    console.error('⚠️  WARNING: JWT_SECRET is not set in environment variables!');
-  }
-  return jwt.sign({ id }, secret || 'meha_super_secret_jwt_key_2026', { expiresIn: '30d' });
+  return jwt.sign({ id }, process.env.JWT_SECRET || 'fallback_secret', {
+    expiresIn: '30d',
+  });
 };
 
 // Helper: safe user payload (no token — sent via cookie instead)
@@ -50,26 +47,22 @@ export const registerUser = async (req, res) => {
   }
 
   try {
-    const userExists = await User.findOne({ email: email.toLowerCase().trim() });
+    const userExists = await User.findOne({ email });
     if (userExists) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    const user = await User.create({
-      name: name.trim(),
-      email: email.toLowerCase().trim(),
-      password,
-    });
+    const user = await User.create({ name, email, password });
 
     if (user) {
+      // Set token in httpOnly cookie — never sent in JSON body
       res.cookie('token', generateToken(user._id), COOKIE_OPTIONS);
       res.status(201).json(safeUser(user));
     } else {
       res.status(400).json({ message: 'Invalid user data' });
     }
   } catch (error) {
-    console.error('Register error:', error);
-    res.status(500).json({ message: 'Server error. Please try again.' });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -79,24 +72,18 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
-  if (!email || !password) {
-    return res.status(400).json({ message: 'Email and password are required' });
-  }
-
   try {
-    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    const user = await User.findOne({ email });
 
     if (user && (await user.comparePassword(password))) {
+      // Set token in httpOnly cookie — never sent in JSON body
       res.cookie('token', generateToken(user._id), COOKIE_OPTIONS);
       res.json(safeUser(user));
     } else {
-      // Same generic message for both "user not found" and "wrong password"
-      // — prevents user enumeration attacks
       res.status(401).json({ message: 'Invalid email or password' });
     }
   } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ message: 'Server error. Please try again.' });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -125,8 +112,7 @@ export const getUserProfile = async (req, res) => {
       res.status(404).json({ message: 'User not found' });
     }
   } catch (error) {
-    console.error('Get profile error:', error);
-    res.status(500).json({ message: 'Server error. Please try again.' });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -138,15 +124,9 @@ export const updateUserProfile = async (req, res) => {
     const user = await User.findById(req.user._id);
 
     if (user) {
-      // Only update name — never allow role to be changed via this endpoint
-      if (req.body.name) {
-        user.name = req.body.name.trim();
-      }
+      user.name = req.body.name || user.name;
 
       if (req.body.password) {
-        if (req.body.password.length < 6) {
-          return res.status(400).json({ message: 'Password must be at least 6 characters long' });
-        }
         user.password = req.body.password;
       }
 
@@ -155,13 +135,14 @@ export const updateUserProfile = async (req, res) => {
       }
 
       const updatedUser = await user.save();
+
+      // Refresh the cookie with a new token
       res.cookie('token', generateToken(updatedUser._id), COOKIE_OPTIONS);
       res.json(safeUser(updatedUser));
     } else {
       res.status(404).json({ message: 'User not found' });
     }
   } catch (error) {
-    console.error('Update profile error:', error);
-    res.status(500).json({ message: 'Server error. Please try again.' });
+    res.status(500).json({ message: error.message });
   }
 };

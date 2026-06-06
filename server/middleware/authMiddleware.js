@@ -10,18 +10,11 @@ export const protect = async (req, res, next) => {
   }
 
   try {
-    const secret = process.env.JWT_SECRET || 'meha_super_secret_jwt_key_2026';
-    const decoded = jwt.verify(token, secret);
-    const user = await User.findById(decoded.id).select('-password');
-
-    if (!user) {
-      return res.status(401).json({ message: 'Not authorized, user not found' });
-    }
-
-    req.user = user;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret');
+    req.user = await User.findById(decoded.id).select('-password');
     next();
   } catch (error) {
-    console.error('Auth middleware error:', error.message);
+    console.error(error);
     res.status(401).json({ message: 'Not authorized, token failed' });
   }
 };
@@ -30,7 +23,6 @@ export const admin = (req, res, next) => {
   if (req.user && req.user.role === 'admin') {
     next();
   } else {
-    // 403 Forbidden is more accurate than 401 here
-    res.status(403).json({ message: 'Access denied: admin only' });
+    res.status(401).json({ message: 'Not authorized as an admin' });
   }
 };

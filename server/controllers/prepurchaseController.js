@@ -7,27 +7,20 @@ export const createPrePurchase = async (req, res) => {
   try {
     const { items, totalAmount } = req.body;
 
-    if (!items || items.length === 0) {
+    if (items && items.length === 0) {
       return res.status(400).json({ message: 'No pre-purchase items' });
-    }
-
-    // Validate totalAmount
-    const parsedTotal = parseFloat(totalAmount);
-    if (isNaN(parsedTotal) || parsedTotal < 0) {
-      return res.status(400).json({ message: 'Invalid total amount' });
     }
 
     const prePurchase = new PrePurchase({
       user: req.user._id,
       items,
-      totalAmount: parsedTotal,
+      totalAmount,
     });
 
     const createdPrePurchase = await prePurchase.save();
     res.status(201).json(createdPrePurchase);
   } catch (error) {
-    console.error('createPrePurchase error:', error);
-    res.status(500).json({ message: 'Server error. Please try again.' });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -42,8 +35,7 @@ export const getMyPrePurchases = async (req, res) => {
     );
     res.json(prePurchases);
   } catch (error) {
-    console.error('getMyPrePurchases error:', error);
-    res.status(500).json({ message: 'Server error. Please try again.' });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -57,8 +49,7 @@ export const getAllPrePurchases = async (req, res) => {
       .populate('items.product', 'name');
     res.json(prePurchases);
   } catch (error) {
-    console.error('getAllPrePurchases error:', error);
-    res.status(500).json({ message: 'Server error. Please try again.' });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -67,36 +58,22 @@ export const getAllPrePurchases = async (req, res) => {
 // @access  Private/Admin
 export const updatePrePurchaseStatus = async (req, res) => {
   try {
-    // Must match the enum in models/PrePurchase.js exactly
-    const allowedStatuses = ['Pending', 'Allocated', 'Completed', 'Cancelled'];
-    const { status, finalAmount } = req.body;
-
-    // Validate status value against whitelist
-    if (status && !allowedStatuses.includes(status)) {
-      return res.status(400).json({
-        message: `Invalid status. Must be one of: ${allowedStatuses.join(', ')}`,
-      });
-    }
-
     const prePurchase = await PrePurchase.findById(req.params.id);
-    if (!prePurchase) {
-      return res.status(404).json({ message: 'Pre-purchase not found' });
-    }
 
-    if (status) prePurchase.status = status;
+    if (prePurchase) {
+      prePurchase.status = req.body.status || prePurchase.status;
 
-    if (finalAmount !== undefined && finalAmount !== null) {
-      const parsedFinal = parseFloat(finalAmount);
-      if (isNaN(parsedFinal) || parsedFinal < 0) {
-        return res.status(400).json({ message: 'Invalid final amount' });
+      // Save the actual amount paid at store when provided (e.g., after negotiation)
+      if (req.body.finalAmount !== undefined && req.body.finalAmount !== null) {
+        prePurchase.finalAmount = Number(req.body.finalAmount);
       }
-      prePurchase.finalAmount = parsedFinal;
-    }
 
-    const updatedPrePurchase = await prePurchase.save();
-    res.json(updatedPrePurchase);
+      const updatedPrePurchase = await prePurchase.save();
+      res.json(updatedPrePurchase);
+    } else {
+      res.status(404).json({ message: 'Pre-purchase not found' });
+    }
   } catch (error) {
-    console.error('updatePrePurchaseStatus error:', error);
-    res.status(500).json({ message: 'Server error. Please try again.' });
+    res.status(500).json({ message: error.message });
   }
 };
