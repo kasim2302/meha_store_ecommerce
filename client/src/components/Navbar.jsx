@@ -1,7 +1,7 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { ShoppingBag, User, LogOut, Package, Settings, ChevronDown } from 'lucide-react';
+import { ShoppingBag, User, LogOut, Settings, ChevronDown } from 'lucide-react';
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
@@ -30,9 +30,24 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link to="/" className="flex-shrink-0 flex items-center gap-2">
-              <Package className="h-8 w-8 text-indigo-600" />
-              <span className="font-bold text-xl tracking-tight text-gray-900">MEHA Store</span>
+            <Link to="/" className="flex-shrink-0 flex items-center">
+              <img
+                src="/meha-logo.png"
+                alt="MEHA Store"
+                className="h-10 w-auto object-contain"
+                onError={(e) => {
+                  // Graceful fallback if image fails
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'flex';
+                }}
+              />
+              {/* Fallback text logo (hidden unless image fails) */}
+              <span
+                className="font-bold text-xl tracking-tight text-indigo-600 items-center gap-2"
+                style={{ display: 'none' }}
+              >
+                MEHA Store
+              </span>
             </Link>
             <div className="hidden sm:ml-8 sm:flex sm:space-x-8">
               <Link to="/" className="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors">
