@@ -26,8 +26,11 @@ const app = express();
 
 // ── Middleware ──────────────────────────────────────────────
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
-  credentials: true, // allow cookies to be sent cross-origin
+  origin: [
+    "http://localhost:5173",
+    "https://meha-store-ecommerce.vercel.app"
+  ],
+  credentials: true,
 }));
 app.use(express.json());
 app.use(cookieParser()); // parse incoming cookies
