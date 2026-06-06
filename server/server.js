@@ -28,7 +28,9 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://meha-store-ecommerce.vercel.app"
+    "https://meha-store-ecommerce.vercel.app",
+    "https://meha-store-ecommerce-qgczaieqx-mohamed-kasims-projects.vercel.app"
+
   ],
   credentials: true,
 }));
