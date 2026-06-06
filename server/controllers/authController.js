@@ -2,10 +2,12 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
 // ── Cookie options ─────────────────────────────────────────
+const isProduction = process.env.NODE_ENV === 'production';
+
 const COOKIE_OPTIONS = {
-  httpOnly: true,              // JS cannot access this cookie at all
-  secure: process.env.NODE_ENV === 'production', // HTTPS only in production
-  sameSite: 'strict',          // blocks cross-site request forgery
+  httpOnly: true,                    // JS cannot access this cookie
+  secure: isProduction,              // HTTPS only in production
+  sameSite: isProduction ? 'none' : 'lax', // 'none' required for cross-origin (Vercel → Render)
   maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in ms
 };
 
@@ -91,8 +93,8 @@ export const loginUser = async (req, res) => {
 export const logoutUser = (req, res) => {
   res.cookie('token', '', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax',
     expires: new Date(0), // immediately expire the cookie
   });
   res.json({ message: 'Logged out successfully' });
