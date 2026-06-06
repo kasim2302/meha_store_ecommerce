@@ -70,7 +70,7 @@ const Navbar = () => {
                       )}
                     </div>
                     <span className="text-sm font-medium text-gray-700 hidden sm:block">
-                      {user.name.split(' ')[0]}
+                      {user.name?.split(' ')[0] || 'User'}
                     </span>
                     <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
                   </button>
