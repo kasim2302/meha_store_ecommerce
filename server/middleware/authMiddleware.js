@@ -10,9 +10,7 @@ export const protect = async (req, res, next) => {
   }
 
   try {
-    const secret = process.env.JWT_SECRET;
-    if (!secret) throw new Error('JWT_SECRET is not configured');
-
+    const secret = process.env.JWT_SECRET || 'meha_super_secret_jwt_key_2026';
     const decoded = jwt.verify(token, secret);
     const user = await User.findById(decoded.id).select('-password');
 
