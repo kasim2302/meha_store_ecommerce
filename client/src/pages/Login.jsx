@@ -8,6 +8,7 @@ const Login = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -39,6 +40,11 @@ const Login = () => {
     
     if (password.length < 6) {
       return setError('Password must be at least 6 characters long');
+    }
+
+    // Confirm password check (register only)
+    if (!isLogin && password !== confirmPassword) {
+      return setError('Passwords do not match');
     }
 
     setIsLoading(true);
@@ -127,6 +133,31 @@ const Login = () => {
                 />
               </div>
             </div>
+            {!isLogin && (
+              <div>
+                <label className="sr-only">Confirm Password</label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Lock className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    type="password"
+                    required
+                    className={`block w-full pl-10 pr-3 py-3 border rounded-xl focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50 text-gray-900 placeholder-gray-500 focus:bg-white transition-colors ${
+                      confirmPassword && confirmPassword !== password
+                        ? 'border-red-400 bg-red-50'
+                        : 'border-gray-200'
+                    }`}
+                    placeholder="Confirm Password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                  {confirmPassword && confirmPassword !== password && (
+                    <p className="mt-1 text-xs text-red-500 pl-1">Passwords do not match</p>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
 
           <div>
@@ -142,7 +173,7 @@ const Login = () => {
         
         <div className="text-center mt-4">
           <button 
-            onClick={() => { setIsLogin(!isLogin); setError(''); }}
+            onClick={() => { setIsLogin(!isLogin); setError(''); setConfirmPassword(''); }}
             className="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors"
           >
             {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
