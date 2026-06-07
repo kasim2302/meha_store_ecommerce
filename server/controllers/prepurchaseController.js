@@ -64,9 +64,10 @@ export const getAllPrePurchases = async (req, res) => {
 // @route   PUT /api/prepurchase/:id/status
 // @access  Private/Admin
 export const updatePrePurchaseStatus = async (req, res) => {
-  // Bug 5 fix: whitelist valid status values
-  const VALID_STATUSES = ['pending', 'confirmed', 'cancelled', 'completed'];
+  // Fix validation whitelist to match Mongoose schema casing and allowed values
+  const VALID_STATUSES = ['Pending', 'Allocated', 'Completed', 'Cancelled'];
   if (req.body.status && !VALID_STATUSES.includes(req.body.status)) {
+
     return res.status(400).json({
       message: `Invalid status. Must be one of: ${VALID_STATUSES.join(', ')}`
     });
