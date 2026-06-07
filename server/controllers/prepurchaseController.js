@@ -7,14 +7,21 @@ export const createPrePurchase = async (req, res) => {
   try {
     const { items, totalAmount } = req.body;
 
-    if (items && items.length === 0) {
-      return res.status(400).json({ message: 'No pre-purchase items' });
+    // Bug 4 fix: correct logic — catches null/undefined/empty
+    if (!items || items.length === 0) {
+      return res.status(400).json({ message: 'No pre-purchase items provided' });
+    }
+
+    // Validate totalAmount is a positive number
+    const parsedTotal = parseFloat(totalAmount);
+    if (isNaN(parsedTotal) || parsedTotal < 0) {
+      return res.status(400).json({ message: 'Invalid total amount' });
     }
 
     const prePurchase = new PrePurchase({
       user: req.user._id,
       items,
-      totalAmount,
+      totalAmount: parsedTotal,
     });
 
     const createdPrePurchase = await prePurchase.save();
@@ -57,6 +64,14 @@ export const getAllPrePurchases = async (req, res) => {
 // @route   PUT /api/prepurchase/:id/status
 // @access  Private/Admin
 export const updatePrePurchaseStatus = async (req, res) => {
+  // Bug 5 fix: whitelist valid status values
+  const VALID_STATUSES = ['pending', 'confirmed', 'cancelled', 'completed'];
+  if (req.body.status && !VALID_STATUSES.includes(req.body.status)) {
+    return res.status(400).json({
+      message: `Invalid status. Must be one of: ${VALID_STATUSES.join(', ')}`
+    });
+  }
+
   try {
     const prePurchase = await PrePurchase.findById(req.params.id);
 

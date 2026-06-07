@@ -35,8 +35,12 @@ const PrePurchaseList = () => {
       setSuccess(true);
       clearPrePurchase();
     } catch (error) {
-      console.error("Submission failed", error);
-      toast.error('Failed to submit pre-purchase request. Please try again.', 'Submission Failed');
+      // Bug 8 fix: show actual server error message if available
+      const serverMsg = error.response?.data?.message;
+      toast.error(
+        serverMsg || 'Failed to submit pre-purchase request. Please try again.',
+        'Submission Failed'
+      );
     } finally {
       setIsSubmitting(false);
     }

@@ -102,7 +102,7 @@ const ProductDetails = () => {
                 </button>
                 <span className="w-10 text-center font-medium text-gray-900">{quantity}</span>
                 <button 
-                  onClick={() => setQuantity(quantity + 1)}
+                  onClick={() => setQuantity(Math.min(product.quantity, quantity + 1))}
                   className="p-2 text-gray-500 hover:text-indigo-600 transition-colors"
                 >
                   <Plus className="h-4 w-4" />

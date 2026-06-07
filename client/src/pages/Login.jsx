@@ -142,7 +142,7 @@ const Login = () => {
         
         <div className="text-center mt-4">
           <button 
-            onClick={() => setIsLogin(!isLogin)}
+            onClick={() => { setIsLogin(!isLogin); setError(''); }}
             className="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors"
           >
             {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}

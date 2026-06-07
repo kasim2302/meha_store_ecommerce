@@ -13,9 +13,9 @@ const COOKIE_OPTIONS = {
 
 // Helper: generate JWT token
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET || 'fallback_secret', {
-    expiresIn: '30d',
-  });
+  const secret = process.env.JWT_SECRET;
+  if (!secret) throw new Error('JWT_SECRET environment variable is not set');
+  return jwt.sign({ id }, secret, { expiresIn: '30d' });
 };
 
 // Helper: safe user payload (no token — sent via cookie instead)
@@ -72,6 +72,11 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
+  // Validate inputs before touching the database
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email and password are required' });
+  }
+
   try {
     const user = await User.findOne({ email });
 
@@ -120,11 +125,21 @@ export const getUserProfile = async (req, res) => {
 // @route   PUT /api/auth/profile
 // @access  Private
 export const updateUserProfile = async (req, res) => {
+  // Validate name if provided
+  if (req.body.name !== undefined && req.body.name.trim().length < 3) {
+    return res.status(400).json({ message: 'Name must be at least 3 characters long' });
+  }
+
+  // Validate password if provided
+  if (req.body.password !== undefined && req.body.password.length < 6) {
+    return res.status(400).json({ message: 'Password must be at least 6 characters long' });
+  }
+
   try {
     const user = await User.findById(req.user._id);
 
     if (user) {
-      user.name = req.body.name || user.name;
+      user.name = req.body.name ? req.body.name.trim() : user.name;
 
       if (req.body.password) {
         user.password = req.body.password;

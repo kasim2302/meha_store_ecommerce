@@ -39,8 +39,25 @@ const Profile = () => {
     setIsLoading(true);
     setMessage({ text: '', type: '' });
 
+    // Bug 6 fix: validate before submitting
+    if (name.trim().length < 3) {
+      setMessage({ text: 'Name must be at least 3 characters long', type: 'error' });
+      setIsLoading(false);
+      return;
+    }
+    if (password && password.length < 6) {
+      setMessage({ text: 'Password must be at least 6 characters long', type: 'error' });
+      setIsLoading(false);
+      return;
+    }
+    if (profilePicture && profilePicture.size > 5 * 1024 * 1024) {
+      setMessage({ text: 'Image must be smaller than 5 MB', type: 'error' });
+      setIsLoading(false);
+      return;
+    }
+
     const formData = new FormData();
-    formData.append('name', name);
+    formData.append('name', name.trim());
     if (password) formData.append('password', password);
     if (profilePicture) formData.append('profilePicture', profilePicture);
 
