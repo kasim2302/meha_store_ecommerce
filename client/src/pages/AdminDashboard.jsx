@@ -1,12 +1,14 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { LayoutDashboard, Package, Tag, Users, ShoppingCart } from 'lucide-react';
+import { LayoutDashboard, Package, Tag, Users, ShoppingCart, Upload, Megaphone } from 'lucide-react';
 import AnalyticsTab from '../components/admin/AnalyticsTab';
 import ProductManagementTab from '../components/admin/ProductManagementTab';
 import CategoryManagementTab from '../components/admin/CategoryManagementTab';
 import UserManagementTab from '../components/admin/UserManagementTab';
 import ReservationsTab from '../components/admin/ReservationsTab';
+import BulkUploadTab from '../components/admin/BulkUploadTab';
+import BannersTab from '../components/admin/BannersTab';
 
 const tabs = [
   { id: 'dashboard',    label: 'Dashboard',    icon: LayoutDashboard },
@@ -14,6 +16,8 @@ const tabs = [
   { id: 'categories',  label: 'Categories',   icon: Tag },
   { id: 'users',       label: 'Users',        icon: Users },
   { id: 'reservations',label: 'Reservations', icon: ShoppingCart },
+  { id: 'bulkupload',   label: 'Bulk Upload',  icon: Upload },
+  { id: 'banners',      label: 'Banners',      icon: Megaphone },
 ];
 
 const AdminDashboard = () => {
@@ -33,6 +37,8 @@ const AdminDashboard = () => {
       case 'categories':  return <CategoryManagementTab />;
       case 'users':       return <UserManagementTab />;
       case 'reservations':return <ReservationsTab />;
+      case 'bulkupload':   return <BulkUploadTab />;
+      case 'banners':      return <BannersTab />;
       default:            return null;
     }
   };

@@ -12,6 +12,7 @@ import prepurchaseRoutes from './routes/prepurchase.js';
 import categoryRoutes from './routes/category.js';
 import userRoutes from './routes/user.js';
 import adminRoutes from './routes/admin.js';
+import bannerRoutes from './routes/banner.js';
 
 // Load environment variables
 dotenv.config();
@@ -44,6 +45,7 @@ app.use('/api/prepurchase', prepurchaseRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/banners', bannerRoutes);
 
 // ── Start Server ────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;

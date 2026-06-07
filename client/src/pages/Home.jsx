@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Star, ShoppingBag, Package, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, Star, ShoppingBag, Package, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import axios from '../api/axios';
 
 // ── Carousel slides ──────────────────────────────────────────
 const slides = [
@@ -188,10 +189,55 @@ const HeroCarousel = () => {
   );
 };
 
-// ── Main Home Page ───────────────────────────────────────────
 const Home = () => {
+  const [banners, setBanners] = useState([]);
+  const [isBannerVisible, setIsBannerVisible] = useState(true);
+
+  useEffect(() => {
+    const fetchBanners = async () => {
+      try {
+        const { data } = await axios.get('/api/banners');
+        setBanners(data);
+      } catch (error) {
+        console.error('Failed to fetch banners', error);
+      }
+    };
+    fetchBanners();
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen">
+      {/* Promotional Banner Strip */}
+      {isBannerVisible && banners.length > 0 && (
+        <div 
+          className="relative transition-all duration-300 z-40 border-b border-white/10"
+          style={{ backgroundColor: banners[0].bgColor, color: banners[0].textColor }}
+        >
+          <div className="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8 text-center pr-10 flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-4 text-xs font-bold">
+            <span className="bg-white/20 px-2 py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0 select-none">
+              Special Offer
+            </span>
+            <p className="truncate">
+              {banners[0].title} {banners[0].subtitle && <span className="opacity-90 font-medium"> — {banners[0].subtitle}</span>}
+            </p>
+            {banners[0].link && (
+              <Link 
+                to={banners[0].link} 
+                className="underline hover:opacity-85 transition-opacity inline-flex items-center gap-0.5 shrink-0"
+              >
+                View details &rarr;
+              </Link>
+            )}
+          </div>
+          <button 
+            onClick={() => setIsBannerVisible(false)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-lg hover:bg-white/10 transition-colors text-current opacity-80 hover:opacity-100"
+            title="Dismiss"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      )}
 
       {/* ── Hero Section: Text LEFT + Carousel RIGHT ── */}
       <section className="relative pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden">
