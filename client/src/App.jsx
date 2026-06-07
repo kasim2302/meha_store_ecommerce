@@ -5,6 +5,7 @@ import { PrePurchaseProvider } from './context/PrePurchaseContext';
 import { ToastProvider } from './context/ToastContext';
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/react"
+import { RecentlyViewedProvider } from './context/RecentlyViewedContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -23,25 +24,27 @@ function App() {
     <SpeedInsights/>
     <ToastProvider>
       <AuthProvider>
-        <PrePurchaseProvider>
-          <Router>
-            <div className="flex flex-col min-h-screen bg-white text-gray-900 font-sans">
-              <Navbar />
-              <main className="flex-grow">
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/shop" element={<Shop />} />
-                  <Route path="/product/:id" element={<ProductDetails />} />
-                  <Route path="/pre-purchase" element={<PrePurchaseList />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/admin" element={<AdminDashboard />} />
-                  <Route path="/profile" element={<Profile />} />
-                </Routes>
-              </main>
-              <Footer />
-            </div>
-          </Router>
-        </PrePurchaseProvider>
+        <RecentlyViewedProvider>
+          <PrePurchaseProvider>
+            <Router>
+              <div className="flex flex-col min-h-screen bg-white text-gray-900 font-sans">
+                <Navbar />
+                <main className="flex-grow">
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/shop" element={<Shop />} />
+                    <Route path="/product/:id" element={<ProductDetails />} />
+                    <Route path="/pre-purchase" element={<PrePurchaseList />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/admin" element={<AdminDashboard />} />
+                    <Route path="/profile" element={<Profile />} />
+                  </Routes>
+                </main>
+                <Footer />
+              </div>
+            </Router>
+          </PrePurchaseProvider>
+        </RecentlyViewedProvider>
       </AuthProvider>
     </ToastProvider>
     </>
