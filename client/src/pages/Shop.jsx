@@ -265,6 +265,16 @@ const Shop = () => {
                     Out of Stock
                   </div>
                 )}
+                {product.quantity > 0 && product.quantity <= 3 && (
+                  <div className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow">
+                    Only {product.quantity} left!
+                  </div>
+                )}
+                {product.quantity > 3 && product.quantity <= 5 && (
+                  <div className="absolute top-3 left-3 bg-orange-400 text-white text-xs font-bold px-2 py-1 rounded-full shadow">
+                    Almost gone!
+                  </div>
+                )}
               </Link>
               <div className="p-5 flex flex-col flex-grow">
                 <div className="text-xs text-indigo-600 font-semibold mb-1 uppercase tracking-wider">{product.category}</div>

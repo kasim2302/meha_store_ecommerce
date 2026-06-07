@@ -1,7 +1,7 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { ShoppingBag, User, LogOut, Settings, ChevronDown } from 'lucide-react';
+import { ShoppingBag, User, LogOut, Settings, ChevronDown, ClipboardList } from 'lucide-react';
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
@@ -108,6 +108,15 @@ const Navbar = () => {
                       >
                         <Settings className="mr-2 h-4 w-4" /> Profile Settings
                       </Link>
+                      {user.role !== 'admin' && (
+                        <Link
+                          to="/my-orders"
+                          onClick={() => setIsDropdownOpen(false)}
+                          className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-indigo-600 transition-colors"
+                        >
+                          <ClipboardList className="mr-2 h-4 w-4" /> My Reservations
+                        </Link>
+                      )}
                       <button 
                         onClick={handleLogout} 
                         className="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors text-left"

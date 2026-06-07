@@ -216,7 +216,21 @@ const ProductDetails = () => {
                 </button>
               </div>
               <span className="text-sm text-gray-500">
-                {product.quantity > 0 ? `${product.quantity} available in store` : 'Out of stock'}
+                {product.quantity > 0 ? (
+                  <>
+                    {product.quantity <= 3 && (
+                      <span className="inline-flex items-center mr-2 px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-600">
+                        Only {product.quantity} left!
+                      </span>
+                    )}
+                    {product.quantity > 3 && product.quantity <= 5 && (
+                      <span className="inline-flex items-center mr-2 px-2 py-0.5 rounded-full text-xs font-bold bg-orange-100 text-orange-600">
+                        Almost gone!
+                      </span>
+                    )}
+                    {product.quantity} available in store
+                  </>
+                ) : 'Out of stock'}
               </span>
             </div>
 

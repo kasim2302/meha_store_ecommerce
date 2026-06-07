@@ -15,6 +15,7 @@ import PrePurchaseList from './pages/PrePurchaseList';
 import Login from './pages/Login';
 import AdminDashboard from './pages/AdminDashboard';
 import Profile from './pages/Profile';
+import MyOrders from './pages/MyOrders';
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/admin" element={<AdminDashboard />} />
                     <Route path="/profile" element={<Profile />} />
+                    <Route path="/my-orders" element={<MyOrders />} />
                   </Routes>
                 </main>
                 <Footer />
