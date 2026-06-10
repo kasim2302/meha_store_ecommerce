@@ -16,6 +16,8 @@ import Login from './pages/Login';
 import AdminDashboard from './pages/AdminDashboard';
 import Profile from './pages/Profile';
 import MyOrders from './pages/MyOrders';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsAndConditions from './pages/TermsAndConditions';
 
 
 function App() {
@@ -40,6 +42,8 @@ function App() {
                     <Route path="/admin" element={<AdminDashboard />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/my-orders" element={<MyOrders />} />
+                    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                    <Route path="/terms" element={<TermsAndConditions />} />
                   </Routes>
                 </main>
                 <Footer />
