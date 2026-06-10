@@ -13,6 +13,7 @@ import categoryRoutes from './routes/category.js';
 import userRoutes from './routes/user.js';
 import adminRoutes from './routes/admin.js';
 import bannerRoutes from './routes/banner.js';
+import wishlistRoutes from './routes/wishlist.js';
 
 // Load environment variables
 dotenv.config();
@@ -46,6 +47,7 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/banners', bannerRoutes);
+app.use('/api/wishlist', wishlistRoutes);
 
 // ── Start Server ────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;

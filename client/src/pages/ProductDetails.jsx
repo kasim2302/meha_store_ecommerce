@@ -5,7 +5,8 @@ import { PrePurchaseContext } from '../context/PrePurchaseContext';
 import { AuthContext } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { useRecentlyViewed } from '../context/RecentlyViewedContext';
-import { ArrowLeft, Plus, Minus, CheckCircle, Star, User } from 'lucide-react';
+import { ArrowLeft, Plus, Minus, CheckCircle, Star, User, Heart, Share2 } from 'lucide-react';
+import { useWishlist } from '../context/WishlistContext';
 
 // ── Star display (read-only) ──────────────────────────────────
 const StarDisplay = ({ rating, size = 'md' }) => {
@@ -47,6 +48,7 @@ const ProductDetails = () => {
   const { user } = useContext(AuthContext);
   const toast = useToast();
   const { recentlyViewed, addToRecentlyViewed } = useRecentlyViewed();
+  const { isWishlisted, toggleWishlist } = useWishlist();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -89,6 +91,18 @@ const ProductDetails = () => {
     addToPrePurchase(product, quantity);
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
+  };
+
+  const handleShare = async () => {
+    const url = window.location.href;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: product.name, text: product.description, url });
+      } catch { /* user cancelled */ }
+    } else {
+      await navigator.clipboard.writeText(url);
+      toast.success('Link copied to clipboard!', 'Shared');
+    }
   };
 
   const handleSubmitReview = async (e) => {
@@ -185,9 +199,21 @@ const ProductDetails = () => {
           </div>
 
           {/* Price */}
-          <div className="flex items-baseline gap-2 mb-1">
-            <p className="text-2xl font-bold text-gray-900">₹{product.price}</p>
-            <span className="text-xs font-semibold bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">Estimated</span>
+          <div className="flex items-center gap-3 mb-1 flex-wrap">
+            {product.salePrice ? (
+              <>
+                <p className="text-2xl font-bold text-rose-600">₹{product.salePrice}</p>
+                <p className="text-lg text-gray-400 line-through">₹{product.price}</p>
+                <span className="text-xs font-bold bg-rose-100 text-rose-600 px-2 py-0.5 rounded-full">
+                  {Math.round((1 - product.salePrice / product.price) * 100)}% OFF
+                </span>
+              </>
+            ) : (
+              <>
+                <p className="text-2xl font-bold text-gray-900">₹{product.price}</p>
+                <span className="text-xs font-semibold bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">Estimated</span>
+              </>
+            )}
           </div>
           <p className="text-xs text-gray-400 mb-6">
             Final price confirmed at store — may vary based on discounts &amp; negotiation.
@@ -234,25 +260,43 @@ const ProductDetails = () => {
               </span>
             </div>
 
-            <button
-              onClick={handleAddToPrePurchase}
-              disabled={product.quantity <= 0}
-              className={`w-full py-4 rounded-full font-bold text-lg flex items-center justify-center transition-all ${
-                product.quantity <= 0
-                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                  : added
-                  ? 'bg-green-500 text-white'
-                  : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-200 hover:-translate-y-1'
-              }`}
-            >
-              {added ? (
-                <>
-                  <CheckCircle className="mr-2 h-5 w-5" /> Added to Pre-Purchase
-                </>
-              ) : (
-                'Add to Pre-Purchase List'
-              )}
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleAddToPrePurchase}
+                disabled={product.quantity <= 0}
+                className={`flex-1 py-4 rounded-full font-bold text-lg flex items-center justify-center transition-all ${
+                  product.quantity <= 0
+                    ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    : added
+                    ? 'bg-green-500 text-white'
+                    : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-200 hover:-translate-y-1'
+                }`}
+              >
+                {added ? (
+                  <><CheckCircle className="mr-2 h-5 w-5" /> Added to Pre-Purchase</>
+                ) : (
+                  'Add to Pre-Purchase List'
+                )}
+              </button>
+              <button
+                onClick={() => toggleWishlist(product)}
+                className={`w-14 h-14 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0 ${
+                  isWishlisted(product._id)
+                    ? 'bg-rose-50 border-rose-300 text-rose-500'
+                    : 'bg-white border-gray-200 text-gray-400 hover:border-rose-300 hover:text-rose-400'
+                }`}
+                title={isWishlisted(product._id) ? 'Remove from wishlist' : 'Add to wishlist'}
+              >
+                <Heart className={`h-6 w-6 ${isWishlisted(product._id) ? 'fill-rose-500' : ''}`} />
+              </button>
+              <button
+                onClick={handleShare}
+                className="w-14 h-14 rounded-full border-2 border-gray-200 bg-white text-gray-400 hover:border-indigo-300 hover:text-indigo-500 flex items-center justify-center transition-all flex-shrink-0"
+                title="Share this product"
+              >
+                <Share2 className="h-5 w-5" />
+              </button>
+            </div>
             <p className="text-center text-sm text-gray-500 mt-4">
               Pre-selecting this item notifies us to reserve it for your in-store pickup.
             </p>

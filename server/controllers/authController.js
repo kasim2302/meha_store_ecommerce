@@ -23,15 +23,17 @@ const safeUser = (user) => ({
   _id: user._id,
   name: user.name,
   email: user.email,
+  phone: user.phone,
   role: user.role,
   profilePicture: user.profilePicture,
+  wishlist: user.wishlist,
 });
 
 // @desc    Register a new user
 // @route   POST /api/auth/register
 // @access  Public
 export const registerUser = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, phone } = req.body;
 
   if (!name || name.trim().length < 3) {
     return res.status(400).json({ message: 'Name must be at least 3 characters long' });
@@ -52,7 +54,7 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    const user = await User.create({ name, email, password });
+    const user = await User.create({ name, email, password, phone: phone || '' });
 
     if (user) {
       // Set token in httpOnly cookie — never sent in JSON body
@@ -140,6 +142,7 @@ export const updateUserProfile = async (req, res) => {
 
     if (user) {
       user.name = req.body.name ? req.body.name.trim() : user.name;
+      if (req.body.phone !== undefined) user.phone = req.body.phone.trim();
 
       if (req.body.password) {
         user.password = req.body.password;

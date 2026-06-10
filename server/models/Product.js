@@ -11,6 +11,7 @@ const productSchema = new mongoose.Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
   price: { type: Number, required: true },
+  salePrice: { type: Number, default: null },
   quantity: { type: Number, required: true, default: 0 },
   category: {
     type: String,
@@ -21,5 +22,6 @@ const productSchema = new mongoose.Schema({
   averageRating: { type: Number, default: 0 },
   numReviews: { type: Number, default: 0 },
 }, { timestamps: true });
+
 
 export default mongoose.model('Product', productSchema);

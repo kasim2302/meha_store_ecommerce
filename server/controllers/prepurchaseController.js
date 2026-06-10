@@ -93,3 +93,27 @@ export const updatePrePurchaseStatus = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// @desc    Cancel a pre-purchase (user cancels their own Pending reservation)
+// @route   DELETE /api/prepurchase/:id
+// @access  Private
+export const cancelPrePurchase = async (req, res) => {
+  try {
+    const prePurchase = await PrePurchase.findById(req.params.id);
+    if (!prePurchase) return res.status(404).json({ message: 'Reservation not found' });
+
+    if (prePurchase.user.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Not authorised to cancel this reservation' });
+    }
+
+    if (prePurchase.status !== 'Pending') {
+      return res.status(400).json({ message: `Cannot cancel a reservation with status "${prePurchase.status}"` });
+    }
+
+    prePurchase.status = 'Cancelled';
+    await prePurchase.save();
+    res.json({ message: 'Reservation cancelled successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

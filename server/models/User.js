@@ -5,8 +5,10 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  phone: { type: String, default: '' },
   profilePicture: { type: String, default: '' },
-  role: { type: String, enum: ['customer', 'admin'], default: 'customer' }
+  role: { type: String, enum: ['customer', 'admin'], default: 'customer' },
+  wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
 }, { timestamps: true });
 
 // Hash password before saving

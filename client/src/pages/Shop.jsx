@@ -275,6 +275,11 @@ const Shop = () => {
                     Almost gone!
                   </div>
                 )}
+                {product.salePrice && (
+                  <div className="absolute top-3 right-3 bg-rose-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow">
+                    SALE
+                  </div>
+                )}
               </Link>
               <div className="p-5 flex flex-col flex-grow">
                 <div className="text-xs text-indigo-600 font-semibold mb-1 uppercase tracking-wider">{product.category}</div>
@@ -290,8 +295,17 @@ const Shop = () => {
                 )}
                 <div className="mt-auto flex items-center justify-between">
                   <div className="flex items-baseline gap-1">
-                    <span className="text-xl font-bold text-gray-900">₹{product.price}</span>
-                    <span className="text-[10px] font-semibold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded-full">est.</span>
+                    {product.salePrice ? (
+                      <>
+                        <span className="text-xl font-bold text-rose-600">₹{product.salePrice}</span>
+                        <span className="text-sm text-gray-400 line-through">₹{product.price}</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="text-xl font-bold text-gray-900">₹{product.price}</span>
+                        <span className="text-[10px] font-semibold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded-full">est.</span>
+                      </>
+                    )}
                   </div>
                   <Link
                     to={`/product/${product._id}`}

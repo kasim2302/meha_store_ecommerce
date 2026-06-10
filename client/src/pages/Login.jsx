@@ -1,12 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { User, Lock, Mail, ArrowRight } from 'lucide-react';
+import { User, Lock, Mail, Phone, ArrowRight } from 'lucide-react';
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -53,7 +54,7 @@ const Login = () => {
     if (isLogin) {
       result = await login(email, password);
     } else {
-      result = await register(name, email, password);
+      result = await register(name, email, password, phone);
     }
 
     if (!result.success) {
@@ -97,6 +98,23 @@ const Login = () => {
                     placeholder="Full Name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                  />
+                </div>
+              </div>
+            )}
+            {!isLogin && (
+              <div>
+                <label className="sr-only">Phone Number</label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Phone className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    type="tel"
+                    className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50 text-gray-900 placeholder-gray-500 focus:bg-white transition-colors"
+                    placeholder="Phone Number (optional)"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
                   />
                 </div>
               </div>

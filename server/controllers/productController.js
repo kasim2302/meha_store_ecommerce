@@ -35,10 +35,14 @@ export const getProductById = async (req, res) => {
 // @access  Private/Admin
 export const createProduct = async (req, res) => {
   try {
-    const { name, description, price, quantity, category } = req.body;
+    const { name, description, price, salePrice, quantity, category } = req.body;
     const imageUrl = req.file ? req.file.path : req.body.imageUrl;
 
-    const product = new Product({ name, description, price, quantity, category, imageUrl });
+    const product = new Product({
+      name, description, price,
+      salePrice: salePrice ? Number(salePrice) : null,
+      quantity, category, imageUrl
+    });
     const createdProduct = await product.save();
     res.status(201).json(createdProduct);
   } catch (error) {
@@ -51,16 +55,22 @@ export const createProduct = async (req, res) => {
 // @access  Private/Admin
 export const updateProduct = async (req, res) => {
   try {
-    const { name, description, price, quantity, category, imageUrl } = req.body;
+    const { name, description, price, salePrice, quantity, category, imageUrl } = req.body;
     const product = await Product.findById(req.params.id);
 
     if (product) {
-      product.name = name;
-      product.description = description;
-      product.price = price;
-      product.quantity = quantity;
-      product.category = category;
-      product.imageUrl = imageUrl;
+      if (name !== undefined) product.name = name;
+      if (description !== undefined) product.description = description;
+      if (price !== undefined) product.price = price;
+      if (salePrice !== undefined) product.salePrice = salePrice === '' || salePrice === null ? null : Number(salePrice);
+      if (quantity !== undefined) product.quantity = quantity;
+      if (category !== undefined) product.category = category;
+
+      if (req.file) {
+        product.imageUrl = req.file.path;
+      } else if (imageUrl !== undefined) {
+        product.imageUrl = imageUrl;
+      }
 
       const updatedProduct = await product.save();
       res.json(updatedProduct);

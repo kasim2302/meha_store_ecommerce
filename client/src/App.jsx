@@ -18,6 +18,10 @@ import Profile from './pages/Profile';
 import MyOrders from './pages/MyOrders';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsAndConditions from './pages/TermsAndConditions';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import Wishlist from './pages/Wishlist';
+import { WishlistProvider } from './context/WishlistContext';
 
 
 function App() {
@@ -29,26 +33,31 @@ function App() {
       <AuthProvider>
         <RecentlyViewedProvider>
           <PrePurchaseProvider>
-            <Router>
-              <div className="flex flex-col min-h-screen bg-white text-gray-900 font-sans">
-                <Navbar />
-                <main className="flex-grow">
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/shop" element={<Shop />} />
-                    <Route path="/product/:id" element={<ProductDetails />} />
-                    <Route path="/pre-purchase" element={<PrePurchaseList />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/admin" element={<AdminDashboard />} />
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/my-orders" element={<MyOrders />} />
-                    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                    <Route path="/terms" element={<TermsAndConditions />} />
-                  </Routes>
-                </main>
-                <Footer />
-              </div>
-            </Router>
+            <WishlistProvider>
+              <Router>
+                <div className="flex flex-col min-h-screen bg-white text-gray-900 font-sans">
+                  <Navbar />
+                  <main className="flex-grow">
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/shop" element={<Shop />} />
+                      <Route path="/product/:id" element={<ProductDetails />} />
+                      <Route path="/pre-purchase" element={<PrePurchaseList />} />
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/admin" element={<AdminDashboard />} />
+                      <Route path="/profile" element={<Profile />} />
+                      <Route path="/my-orders" element={<MyOrders />} />
+                      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                      <Route path="/terms" element={<TermsAndConditions />} />
+                      <Route path="/about" element={<About />} />
+                      <Route path="/contact" element={<Contact />} />
+                      <Route path="/wishlist" element={<Wishlist />} />
+                    </Routes>
+                  </main>
+                  <Footer />
+                </div>
+              </Router>
+            </WishlistProvider>
           </PrePurchaseProvider>
         </RecentlyViewedProvider>
       </AuthProvider>

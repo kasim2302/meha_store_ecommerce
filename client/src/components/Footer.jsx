@@ -34,6 +34,8 @@ const Footer = () => {
                 { label: 'Pre-Purchase List', to: '/pre-purchase' },
                 { label: 'My Orders', to: '/my-orders' },
                 { label: 'Profile', to: '/profile' },
+                { label: 'About Us', to: '/about' },
+                { label: 'Contact', to: '/contact' },
               ].map(({ label, to }) => (
                 <li key={to}>
                   <Link to={to} className="text-gray-400 hover:text-white transition-colors">{label}</Link>

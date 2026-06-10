@@ -1,10 +1,12 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { ShoppingBag, User, LogOut, Settings, ChevronDown, ClipboardList } from 'lucide-react';
+import { useWishlist } from '../context/WishlistContext';
+import { ShoppingBag, User, LogOut, Settings, ChevronDown, ClipboardList, Heart } from 'lucide-react';
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
+  const { wishlist } = useWishlist();
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -71,9 +73,19 @@ const Navbar = () => {
             {user ? (
               <>
                 {user.role !== 'admin' && (
-                  <Link to="/pre-purchase" className="text-gray-500 hover:text-indigo-600 transition-colors p-2 rounded-full relative" title="Pre-Purchase List">
-                    <ShoppingBag className="h-5 w-5" />
-                  </Link>
+                  <>
+                    <Link to="/pre-purchase" className="text-gray-500 hover:text-indigo-600 transition-colors p-2 rounded-full relative" title="Pre-Purchase List">
+                      <ShoppingBag className="h-5 w-5" />
+                    </Link>
+                    <Link to="/wishlist" className="text-gray-500 hover:text-rose-500 transition-colors p-2 rounded-full relative" title="Wishlist">
+                      <Heart className={`h-5 w-5 ${wishlist.length > 0 ? 'text-rose-500 fill-rose-500' : ''}`} />
+                      {wishlist.length > 0 && (
+                        <span className="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                          {wishlist.length > 9 ? '9+' : wishlist.length}
+                        </span>
+                      )}
+                    </Link>
+                  </>
                 )}
                 {user.role === 'admin' && (
                   <Link to="/admin" className="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors px-2">
@@ -109,13 +121,25 @@ const Navbar = () => {
                         <Settings className="mr-2 h-4 w-4" /> Profile Settings
                       </Link>
                       {user.role !== 'admin' && (
-                        <Link
-                          to="/my-orders"
-                          onClick={() => setIsDropdownOpen(false)}
-                          className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-indigo-600 transition-colors"
-                        >
-                          <ClipboardList className="mr-2 h-4 w-4" /> My Reservations
-                        </Link>
+                        <>
+                          <Link
+                            to="/my-orders"
+                            onClick={() => setIsDropdownOpen(false)}
+                            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-indigo-600 transition-colors"
+                          >
+                            <ClipboardList className="mr-2 h-4 w-4" /> My Reservations
+                          </Link>
+                          <Link
+                            to="/wishlist"
+                            onClick={() => setIsDropdownOpen(false)}
+                            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-rose-500 transition-colors"
+                          >
+                            <Heart className="mr-2 h-4 w-4" /> Wishlist
+                            {wishlist.length > 0 && (
+                              <span className="ml-auto bg-rose-100 text-rose-600 text-xs font-bold px-1.5 py-0.5 rounded-full">{wishlist.length}</span>
+                            )}
+                          </Link>
+                        </>
                       )}
                       <button 
                         onClick={handleLogout} 

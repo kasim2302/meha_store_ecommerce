@@ -37,9 +37,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   // @desc Register — same as login
-  const register = async (name, email, password) => {
+  const register = async (name, email, password, phone) => {
     try {
-      const res = await axios.post('/api/auth/register', { name, email, password });
+      const res = await axios.post('/api/auth/register', { name, email, password, phone: phone || '' });
       setUser(res.data);
       return { success: true };
     } catch (error) {
