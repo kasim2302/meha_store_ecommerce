@@ -60,7 +60,7 @@ const terms = [
     content: [
       {
         subtitle: 'Account Security',
-        text: 'You are responsible for maintaining the confidentiality of your login credentials and for all activities that occur under your account. You must notify us immediately at mehastore@gmail.com if you suspect any unauthorised access.',
+        text: 'You are responsible for maintaining the confidentiality of your login credentials and for all activities that occur under your account. You must notify us immediately at mehastorefancy@gmail.com if you suspect any unauthorised access.',
       },
       {
         subtitle: 'Accurate Information',
@@ -140,7 +140,7 @@ const terms = [
       },
       {
         subtitle: 'Informal Resolution',
-        text: 'Before pursuing formal legal action, we encourage you to contact us first at mehastore@gmail.com. We are committed to resolving disputes informally and promptly.',
+        text: 'Before pursuing formal legal action, we encourage you to contact us first at mehastorefancy@gmail.com. We are committed to resolving disputes informally and promptly.',
       },
     ],
   },
@@ -299,13 +299,13 @@ const TermsAndConditions = () => {
           </p>
           <div className="grid sm:grid-cols-3 gap-6">
             <a
-              href="mailto:mehastore@gmail.com"
+              href="mailto:mehastorefancy@gmail.com"
               className="flex items-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-2xl p-4 transition-colors group"
             >
               <Mail className="w-6 h-6 text-violet-200 group-hover:text-white transition-colors" />
               <div>
                 <p className="text-xs text-violet-200 font-medium uppercase tracking-wider">Email</p>
-                <p className="text-sm font-semibold mt-0.5">mehastore@gmail.com</p>
+                <p className="text-sm font-semibold mt-0.5">mehastorefancy@gmail.com</p>
               </div>
             </a>
             <a

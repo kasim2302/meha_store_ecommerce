@@ -29,8 +29,8 @@ const Contact = () => {
     {
       icon: Phone,
       label: 'Phone',
-      value: '+91 XXXXX XXXXX',
-      href: 'tel:+91XXXXXXXXXX',
+      value: '+91 90258 97581',
+      href: 'tel:+919025897581',
       color: 'from-teal-500 to-cyan-500',
       bg: 'bg-teal-50',
       text: 'text-teal-600',
@@ -38,8 +38,8 @@ const Contact = () => {
     {
       icon: Mail,
       label: 'Email',
-      value: 'mehastore@gmail.com',
-      href: 'mailto:mehastore@gmail.com',
+      value: 'mehastorefancy@gmail.com',
+      href: 'mailto:mehastorefancy@gmail.com',
       color: 'from-indigo-500 to-purple-500',
       bg: 'bg-indigo-50',
       text: 'text-indigo-600',
@@ -47,7 +47,7 @@ const Contact = () => {
     {
       icon: Clock,
       label: 'Store Hours',
-      value: 'Mon–Sat: 9am – 8pm\nSun: 10am – 6pm',
+      value: 'Mon–Sun: 7:00 AM – 9:30 PM\nOpen 7 days a week',
       color: 'from-amber-500 to-orange-500',
       bg: 'bg-amber-50',
       text: 'text-amber-600',

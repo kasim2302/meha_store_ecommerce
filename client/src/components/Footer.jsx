@@ -15,11 +15,11 @@ const Footer = () => {
               Your one-stop shop for toys, cosmetics, gifts, stationery, and jewellery. Browse online, reserve, and pick up in-store.
             </p>
             <div className="mt-5 flex flex-col gap-2 text-sm">
-              <a href="mailto:mehastore@gmail.com" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
-                <Mail className="w-4 h-4" /> mehastore@gmail.com
+              <a href="mailto:mehastorefancy@gmail.com" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+                <Mail className="w-4 h-4" /> mehastorefancy@gmail.com
               </a>
-              <a href="tel:+91XXXXXXXXXX" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
-                <Phone className="w-4 h-4" /> +91 XXXXX XXXXX
+              <a href="tel:+919025897581" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+                <Phone className="w-4 h-4" /> +91 90258 97581
               </a>
             </div>
           </div>
